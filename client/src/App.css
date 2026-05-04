@@ -1,0 +1,16 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --wood-text: #45362c;
+    --wood-surface: #746241;
+    --wood-base: #fff7e2;
+  }
+
+  body {
+    background-color: var(--wood-base);
+    color: var(--wood-text);
+    font-family: ui-serif, Georgia, Cambria, "Times New Roman", serif;
+    letter-spacing: 0.01em;
+  }
+}
