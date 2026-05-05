@@ -1,49 +1,63 @@
-import { createContext, useContext, useEffect, useState } from 'react';
-import { supabase } from '../supabaseClient';
+/* eslint-disable react-refresh/only-export-components */
+import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
+import { authService } from '../services/auth.service';
 
 const AuthContext = createContext(null);
+const SESSION_KEY = 'woodit_session';
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [session, setSession] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    // Get initial session
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session);
-      setUser(session?.user ?? null);
-      if (session) {
-        localStorage.setItem('woodit_session', JSON.stringify(session));
-      }
-      setLoading(false);
-    });
+  const persistSession = useCallback((nextSession, nextUser) => {
+    setSession(nextSession);
+    setUser(nextUser);
 
-    // Listen for auth changes
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      setSession(session);
-      setUser(session?.user ?? null);
-      if (session) {
-        localStorage.setItem('woodit_session', JSON.stringify(session));
-      } else {
-        localStorage.removeItem('woodit_session');
-      }
-    });
-
-    return () => subscription.unsubscribe();
+    if (nextSession?.access_token) {
+      localStorage.setItem(SESSION_KEY, JSON.stringify({ ...nextSession, user: nextUser }));
+    } else {
+      localStorage.removeItem(SESSION_KEY);
+    }
   }, []);
 
-  const isAdmin = user?.user_metadata?.role === 'admin';
+  useEffect(() => {
+    const savedSession = JSON.parse(localStorage.getItem(SESSION_KEY) || 'null');
+    if (savedSession?.access_token) {
+      setSession(savedSession);
+      setUser(savedSession.user ?? null);
+    }
+    setLoading(false);
+  }, []);
 
-  const logout = async () => {
-    await supabase.auth.signOut();
-    localStorage.removeItem('woodit_session');
-    setUser(null);
-    setSession(null);
-  };
+  const login = useCallback(async (credentials) => {
+    const response = await authService.login(credentials);
+    const { session: nextSession, user: nextUser } = response.data.data;
+    persistSession(nextSession, nextUser);
+    return nextUser;
+  }, [persistSession]);
+
+  const signup = useCallback(async (payload) => {
+    const response = await authService.signup(payload);
+    return response.data.data.user;
+  }, []);
+
+  const logout = useCallback(async () => {
+    try {
+      await authService.logout();
+    } finally {
+      persistSession(null, null);
+    }
+  }, [persistSession]);
+
+  const isAdmin = user?.user_metadata?.role === 'admin';
+  const value = useMemo(
+    () => ({ user, session, loading, isAdmin, login, signup, logout }),
+    [user, session, loading, isAdmin, login, signup, logout]
+  );
 
   return (
-    <AuthContext.Provider value={{ user, session, loading, isAdmin, logout }}>
+    <AuthContext.Provider value={value}>
       {children}
     </AuthContext.Provider>
   );

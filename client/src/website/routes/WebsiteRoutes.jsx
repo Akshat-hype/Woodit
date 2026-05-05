@@ -3,6 +3,7 @@ import Navbar from '../components/layout/Navbar';
 import Footer from '../components/layout/Footer';
 import WhatsAppFloat from '../components/layout/WhatsAppFloat';
 import Home from '../pages/Home';
+import Categories from '../pages/Categories';
 import CategoryPage from '../pages/CategoryPage';
 import Contact from '../pages/Contact';
 import Login from '../pages/Login';
@@ -15,6 +16,7 @@ const WebsiteRoutes = () => {
       <main className="flex-1">
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/categories" element={<Categories />} />
           <Route path="/category/:slug" element={<CategoryPage />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/login" element={<Login />} />

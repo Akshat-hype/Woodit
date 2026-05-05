@@ -12,6 +12,7 @@ import bannerRoutes from './routes/banner.routes.js';
 import testimonialRoutes from './routes/testimonial.routes.js';
 import catalogueRoutes from './routes/catalogue.routes.js';
 import categoryRoutes from './routes/category.routes.js';
+import mediaRoutes from './routes/media.routes.js';
 
 const app = express();
 
@@ -34,6 +35,7 @@ app.use('/api/banners', bannerRoutes);
 app.use('/api/testimonials', testimonialRoutes);
 app.use('/api/catalogue', catalogueRoutes);
 app.use('/api/categories', categoryRoutes);
+app.use('/api/media', mediaRoutes);
 
 // 404 handler
 app.use((req, res) => {

@@ -1,33 +1,28 @@
 import { Link } from 'react-router-dom';
-import { Phone, Mail, MapPin, Clock } from 'lucide-react';
-import { CATEGORIES, WHATSAPP_LINK, CONTACT } from '../../../utils/constants';
+import { Clock, Mail, MapPin, Phone } from 'lucide-react';
+import { CATEGORIES, CONTACT, FINAL_BRAND_LINE, WHATSAPP_LINK } from '../../../utils/constants';
 
 const Footer = () => {
   return (
-    <footer className="bg-[#111] text-white mt-24">
-      <div className="max-w-7xl mx-auto px-6 sm:px-10 lg:px-16 py-16">
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-10">
-
-          {/* Brand */}
-          <div className="md:col-span-4">
+    <footer className="bg-[#171310] text-white">
+      <div className="page-shell py-12 sm:py-16">
+        <div className="grid gap-10 lg:grid-cols-[1.2fr_1fr_1fr_1fr]">
+          <div>
             <span className="font-serif text-3xl font-bold">
               Wood<span className="text-[var(--color-primary-light)]">It</span>
             </span>
-            <p className="mt-4 text-sm text-gray-400 leading-relaxed max-w-xs">
-              WoodIt Exportz is a Jodhpur-based furniture manufacturer creating handcrafted pieces for global spaces where design, durability, and detail come together.
+            <p className="mt-4 max-w-sm text-sm leading-7 text-white/62">
+              Jodhpur-based furniture makers creating durable, handcrafted pieces for global spaces.
             </p>
-            <p className="mt-6 text-xs text-[var(--color-primary-light)] tracking-widest uppercase">
-              Handcrafted in India. Delivered Worldwide.
-            </p>
+            <p className="mt-6 text-xs uppercase tracking-[0.18em] text-[var(--color-primary-light)]">{FINAL_BRAND_LINE}</p>
           </div>
 
-          {/* Collections */}
-          <div className="md:col-span-3">
-            <h4 className="text-xs font-semibold uppercase tracking-widest text-gray-500 mb-5">Collections</h4>
-            <ul className="space-y-2.5">
-              {CATEGORIES.slice(0, 5).map(cat => (
+          <div>
+            <h4 className="mb-4 text-xs font-semibold uppercase tracking-[0.18em] text-white/38">Collections</h4>
+            <ul className="grid gap-2.5">
+              {CATEGORIES.slice(0, 4).map((cat) => (
                 <li key={cat.slug}>
-                  <Link to={`/category/${cat.slug}`} className="text-sm text-gray-400 hover:text-white transition-colors">
+                  <Link to={`/category/${cat.slug}`} className="text-sm text-white/62 transition-colors hover:text-white">
                     {cat.name}
                   </Link>
                 </li>
@@ -35,57 +30,52 @@ const Footer = () => {
             </ul>
           </div>
 
-          {/* More */}
-          <div className="md:col-span-2">
-            <h4 className="text-xs font-semibold uppercase tracking-widest text-gray-500 mb-5">More</h4>
-            <ul className="space-y-2.5">
-              {CATEGORIES.slice(5).map(cat => (
+          <div>
+            <h4 className="mb-4 text-xs font-semibold uppercase tracking-[0.18em] text-white/38">More</h4>
+            <ul className="grid gap-2.5">
+              {CATEGORIES.slice(4).map((cat) => (
                 <li key={cat.slug}>
-                  <Link to={`/category/${cat.slug}`} className="text-sm text-gray-400 hover:text-white transition-colors">
+                  <Link to={`/category/${cat.slug}`} className="text-sm text-white/62 transition-colors hover:text-white">
                     {cat.name}
                   </Link>
                 </li>
               ))}
               <li>
-                <Link to="/contact" className="text-sm text-gray-400 hover:text-white transition-colors">Contact Us</Link>
+                <Link to="/contact" className="text-sm text-white/62 transition-colors hover:text-white">Contact</Link>
               </li>
             </ul>
           </div>
 
-          {/* Contact */}
-          <div className="md:col-span-3">
-            <h4 className="text-xs font-semibold uppercase tracking-widest text-gray-500 mb-5">Contact</h4>
-            <ul className="space-y-3.5">
+          <div>
+            <h4 className="mb-4 text-xs font-semibold uppercase tracking-[0.18em] text-white/38">Contact</h4>
+            <ul className="grid gap-3.5">
               <li>
-                <a href={WHATSAPP_LINK()} target="_blank" rel="noreferrer"
-                  className="flex items-start gap-2.5 text-sm text-gray-400 hover:text-white transition-colors">
-                  <Phone size={14} className="mt-0.5 shrink-0" />
+                <a href={WHATSAPP_LINK()} target="_blank" rel="noreferrer" className="flex items-start gap-2.5 text-sm text-white/62 transition-colors hover:text-white">
+                  <Phone size={15} className="mt-0.5 shrink-0" />
                   {CONTACT.phone}
                 </a>
               </li>
               <li>
-                <a href={`mailto:${CONTACT.email}`}
-                  className="flex items-start gap-2.5 text-sm text-gray-400 hover:text-white transition-colors">
-                  <Mail size={14} className="mt-0.5 shrink-0" />
+                <a href={`mailto:${CONTACT.email}`} className="flex items-start gap-2.5 text-sm text-white/62 transition-colors hover:text-white">
+                  <Mail size={15} className="mt-0.5 shrink-0" />
                   {CONTACT.email}
                 </a>
               </li>
-              <li className="flex items-start gap-2.5 text-sm text-gray-400">
-                <MapPin size={14} className="mt-0.5 shrink-0" />
+              <li className="flex items-start gap-2.5 text-sm text-white/62">
+                <MapPin size={15} className="mt-0.5 shrink-0" />
                 {CONTACT.location}
               </li>
-              <li className="flex items-start gap-2.5 text-sm text-gray-400">
-                <Clock size={14} className="mt-0.5 shrink-0" />
+              <li className="flex items-start gap-2.5 text-sm text-white/62">
+                <Clock size={15} className="mt-0.5 shrink-0" />
                 {CONTACT.hours}
               </li>
             </ul>
           </div>
         </div>
 
-        {/* Bottom */}
-        <div className="border-t border-gray-800 mt-12 pt-6 flex flex-col sm:flex-row items-center justify-between gap-2">
-          <p className="text-xs text-gray-600">© {new Date().getFullYear()} WoodIt Exportz. All rights reserved.</p>
-          <p className="text-xs text-gray-600">Jodhpur, Rajasthan, India</p>
+        <div className="mt-10 flex flex-col gap-2 border-t border-white/10 pt-5 text-xs text-white/38 sm:flex-row sm:items-center sm:justify-between">
+          <p>© {new Date().getFullYear()} {CONTACT.businessName}. All rights reserved.</p>
+          <p>Jodhpur, Rajasthan, India</p>
         </div>
       </div>
     </footer>

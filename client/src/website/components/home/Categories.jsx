@@ -1,59 +1,52 @@
 import { Link } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
 import { CATEGORIES } from '../../../utils/constants';
+import chairImage from '../../../assets/images/categories-accent-chair.webp';
+import sofaImage from '../../../assets/images/categories-lounge-sofa-set.webp';
+import stoolImage from '../../../assets/images/categories-folding-butterfly-chair.webp';
+import bedImage from '../../../assets/images/categories-heritage-canopy-bed.webp';
+import cabinetImage from '../../../assets/images/categories-cabinet-chest-of-drawers.webp';
+import outdoorImage from '../../../assets/images/categories-handwoven-rope-lounge-chair.webp';
+
+const categoryImages = [chairImage, sofaImage, stoolImage, bedImage, outdoorImage, cabinetImage, chairImage, cabinetImage];
 
 const Categories = () => {
   return (
-    <section className="py-24 bg-white">
-      <div className="max-w-7xl mx-auto px-6 sm:px-10 lg:px-16">
-
-        {/* Header */}
-        <div className="mb-14">
-          <div className="flex items-center gap-3 mb-4">
-            <div className="w-8 h-px bg-[var(--color-primary)]" />
-            <span className="text-xs uppercase tracking-[0.25em] text-[var(--color-primary)] font-medium">
-              Collections
-            </span>
-          </div>
-          <div className="flex items-end justify-between">
-            <h2 className="font-serif text-4xl sm:text-5xl font-semibold text-[var(--color-text)]">
+    <section className="bg-white py-16 sm:py-20 lg:py-24">
+      <div className="page-shell">
+        <div className="mb-10 grid gap-4 md:grid-cols-[1fr_360px] md:items-end">
+          <div>
+            <p className="mb-3 text-xs font-semibold uppercase tracking-[0.22em] text-[var(--color-primary)]">Collections</p>
+            <h2 className="font-serif text-4xl font-semibold leading-tight text-[var(--color-text)] sm:text-5xl">
               Browse by Category
             </h2>
-            <p className="hidden md:block text-sm text-[var(--color-text-muted)] max-w-xs text-right leading-relaxed">
-              Explore thoughtfully designed furniture collections crafted for global spaces.
-            </p>
           </div>
+          <p className="text-sm leading-6 text-[var(--color-text-muted)]">
+            Furniture collections organized for hospitality buyers, interior projects, and custom residential spaces.
+          </p>
         </div>
 
-        {/* Grid */}
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
-          {CATEGORIES.map((cat) => (
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {CATEGORIES.map((cat, index) => (
             <Link
               key={cat.slug}
               to={`/category/${cat.slug}`}
-              className="group relative bg-[var(--color-background)] border border-[var(--color-border)] rounded-sm p-6 hover:bg-white hover:border-[var(--color-primary)]/40 hover:shadow-lg transition-all duration-300"
+              className="group overflow-hidden rounded-md border border-[var(--color-border)] bg-[var(--color-background)] transition hover:-translate-y-1 hover:border-[var(--color-primary)]/40 hover:shadow-xl"
             >
-              {/* Icon */}
-              <div className="text-3xl mb-5">{cat.icon}</div>
-
-              {/* Name */}
-              <h3 className="font-medium text-[var(--color-text)] text-sm leading-snug mb-2">
-                {cat.name}
-              </h3>
-
-              {/* Tagline */}
-              <p className="text-xs text-[var(--color-text-muted)] leading-relaxed line-clamp-2 mb-4">
-                {cat.tagline}
-              </p>
-
-              {/* Explore */}
-              <div className="flex items-center gap-1 text-[var(--color-primary)] text-xs font-medium translate-y-1 opacity-0 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-200">
-                <span>Explore</span>
-                <ArrowRight size={11} />
+              <div className="aspect-[4/3] overflow-hidden bg-[#ddd2c3]">
+                <img
+                  src={categoryImages[index]}
+                  alt={cat.name}
+                  className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
+                />
               </div>
-
-              {/* Bottom accent */}
-              <div className="absolute bottom-0 left-0 h-0.5 w-0 bg-[var(--color-primary)] group-hover:w-full transition-all duration-300 rounded-b-sm" />
+              <div className="p-4 sm:p-5">
+                <h3 className="text-base font-semibold leading-snug text-[var(--color-text)]">{cat.name}</h3>
+                <p className="mt-2 line-clamp-2 text-xs leading-5 text-[var(--color-text-muted)]">{cat.tagline}</p>
+                <div className="mt-4 inline-flex items-center gap-2 text-xs font-semibold text-[var(--color-primary-dark)]">
+                  Explore <ArrowRight size={14} />
+                </div>
+              </div>
             </Link>
           ))}
         </div>

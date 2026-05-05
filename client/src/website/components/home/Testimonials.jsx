@@ -6,52 +6,53 @@ const Testimonials = () => {
   const { data, loading } = useFetch(() => testimonialService.getAll(), []);
   const testimonials = data?.testimonials || [];
 
-  if (loading || !testimonials.length) return null;
-
   return (
-    <section className="py-20 bg-[var(--color-background)]">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section className="bg-white py-16 sm:py-20">
+      <div className="page-shell">
+        <div className="mb-10 max-w-2xl">
+          <p className="mb-3 text-xs font-semibold uppercase tracking-[0.22em] text-[var(--color-primary)]">Testimonials</p>
+          <h2 className="font-serif text-4xl font-semibold text-[var(--color-text)]">Trusted by project buyers</h2>
+        </div>
 
-        {/* Header */}
-        <div className="text-center mb-14">
-          <div className="flex items-center justify-center gap-2 mb-3">
-            <div className="w-6 h-px bg-[var(--color-primary)]" />
-            <span className="text-xs uppercase tracking-[0.2em] text-[var(--color-primary)]">Testimonials</span>
-            <div className="w-6 h-px bg-[var(--color-primary)]" />
+        {loading ? (
+          <div className="rounded-md border border-[var(--color-border)] bg-[var(--color-background)] p-8 text-sm text-[var(--color-text-muted)]">
+            Loading testimonials...
           </div>
-          <h2 className="font-serif text-4xl font-semibold text-[var(--color-text)]">
-            What Our Clients Say
-          </h2>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {testimonials.map(t => (
-            <div
-              key={t.id}
-              className="bg-white border border-[var(--color-border)] rounded-sm p-8 flex flex-col gap-4"
-            >
-              <Quote size={24} className="text-[var(--color-primary)]/40" />
-              <p className="text-sm text-[var(--color-text-muted)] leading-relaxed flex-1">
-                {t.testimonial_text}
-              </p>
-              <div className="flex items-center gap-3 pt-4 border-t border-[var(--color-border)]">
-                {t.image_url ? (
-                  <img src={t.image_url} alt={t.client_name} className="w-10 h-10 rounded-full object-cover" />
-                ) : (
-                  <div className="w-10 h-10 rounded-full bg-[var(--color-primary)]/10 flex items-center justify-center text-[var(--color-primary)] font-semibold text-sm">
-                    {t.client_name[0]}
-                  </div>
-                )}
-                <div>
-                  <p className="text-sm font-medium text-[var(--color-text)]">{t.client_name}</p>
-                  {t.company && (
-                    <p className="text-xs text-[var(--color-text-muted)]">{t.company}</p>
+        ) : testimonials.length ? (
+          <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+            {testimonials.map((testimonial) => (
+              <article key={testimonial.id} className="rounded-md border border-[var(--color-border)] bg-[var(--color-background)] p-6">
+                <Quote size={24} className="text-[var(--color-primary)]/45" />
+                <p className="mt-5 text-sm leading-7 text-[var(--color-text-muted)]">{testimonial.testimonial_text}</p>
+                <div className="mt-6 flex items-center gap-3 border-t border-[var(--color-border)] pt-4">
+                  {testimonial.image_url ? (
+                    <img src={testimonial.image_url} alt={testimonial.client_name} className="size-10 rounded-full object-cover" />
+                  ) : (
+                    <div className="flex size-10 items-center justify-center rounded-full bg-[var(--color-accent-soft)] text-sm font-semibold text-[var(--color-accent)]">
+                      {testimonial.client_name?.[0] ?? 'W'}
+                    </div>
                   )}
+                  <div>
+                    <p className="text-sm font-semibold text-[var(--color-text)]">{testimonial.client_name}</p>
+                    {testimonial.company && <p className="text-xs text-[var(--color-text-muted)]">{testimonial.company}</p>}
+                  </div>
                 </div>
-              </div>
-            </div>
-          ))}
-        </div>
+              </article>
+            ))}
+          </div>
+        ) : (
+          <div className="grid gap-5 md:grid-cols-3">
+            {['Hospitality projects', 'Designer partnerships', 'Global buyers'].map((label) => (
+              <article key={label} className="rounded-md border border-dashed border-[var(--color-border)] bg-[var(--color-background)] p-6">
+                <Quote size={22} className="text-[var(--color-primary)]/40" />
+                <p className="mt-5 text-sm font-semibold text-[var(--color-text)]">{label}</p>
+                <p className="mt-2 text-xs leading-5 text-[var(--color-text-muted)]">
+                  Published client feedback will appear here once testimonials are added from admin.
+                </p>
+              </article>
+            ))}
+          </div>
+        )}
       </div>
     </section>
   );

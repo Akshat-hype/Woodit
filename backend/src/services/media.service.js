@@ -1,4 +1,4 @@
-import { supabase } from "../config/supabase.js";
+import { supabaseAdmin } from "../config/supabase.js";
 import path from "path";
 
 export async function uploadMedia(file, folder = "general") {
@@ -13,7 +13,7 @@ export async function uploadMedia(file, folder = "general") {
 
   const filePath = `${folder}/${fileName}`;
 
-  const { error } = await supabase.storage
+  const { error } = await supabaseAdmin.storage
     .from("media")
     .upload(filePath, file.buffer, {
       contentType: file.mimetype,
@@ -24,7 +24,7 @@ export async function uploadMedia(file, folder = "general") {
     throw new Error(error.message);
   }
 
-  const { data } = supabase.storage
+  const { data } = supabaseAdmin.storage
     .from("media")
     .getPublicUrl(filePath);
 

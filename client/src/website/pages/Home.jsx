@@ -2,87 +2,64 @@ import Hero from '../components/home/Hero';
 import Categories from '../components/home/Categories';
 import FeaturedProducts from '../components/home/FeaturedProducts';
 import Testimonials from '../components/home/Testimonials';
-import { WHATSAPP_LINK } from '../../utils/constants';
+import { ABOUT_COPY, FINAL_BRAND_LINE, WHATSAPP_LINK } from '../../utils/constants';
 import Button from '../components/common/Button';
+import aboutOne from '../../assets/images/about-1.webp';
+import aboutTwo from '../../assets/images/about-2.webp';
 
 const AboutSection = () => (
-  <section className="py-24 bg-[var(--color-background)]">
-    <div className="max-w-7xl mx-auto px-6 sm:px-10 lg:px-16">
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-
-        {/* Left */}
-        <div>
-          <div className="flex items-center gap-3 mb-4">
-            <div className="w-8 h-px bg-[var(--color-primary)]" />
-            <span className="text-xs uppercase tracking-[0.25em] text-[var(--color-primary)] font-medium">About WoodIt</span>
-          </div>
-          <h2 className="font-serif text-4xl sm:text-5xl font-semibold text-[var(--color-text)] leading-tight mb-6">
-            Rooted in Craft.<br />Built for the World.
-          </h2>
-          <p className="text-sm text-[var(--color-text-muted)] leading-relaxed mb-4">
-            WoodIt is a Jodhpur-based furniture manufacturer creating handcrafted pieces for global spaces where design, durability, and detail come together.
-          </p>
-          <p className="text-sm text-[var(--color-text-muted)] leading-relaxed mb-8">
-            At WoodIt, every piece begins with a simple belief — furniture should not just fill a space, it should belong to it. Rooted in Jodhpur's legacy of craftsmanship, we work closely with skilled artisans who understand wood, material, and form at a deeper level.
-          </p>
-          <div className="grid grid-cols-2 gap-4">
-            {[
-              { label: 'Real Wood', desc: 'Solid wood, metal, rope & leather' },
-              { label: 'B2B Focused', desc: 'Hotels, resorts & global buyers' },
-              { label: 'Export Quality', desc: 'Standards that meet the world' },
-              { label: 'Jodhpur Craft', desc: 'Legacy artisanship at the core' },
-            ].map(item => (
-              <div key={item.label} className="bg-white border border-[var(--color-border)] rounded-sm p-4">
-                <p className="text-sm font-semibold text-[var(--color-text)] mb-1">{item.label}</p>
-                <p className="text-xs text-[var(--color-text-muted)]">{item.desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Right — decorative */}
-        <div className="relative hidden lg:flex items-center justify-center h-[480px]">
-          <div className="absolute inset-0 bg-gradient-to-br from-[var(--color-primary)]/8 to-transparent rounded-sm" />
-          <div className="relative z-10 text-center px-12">
-            <blockquote className="font-serif text-2xl text-[var(--color-text)] italic leading-relaxed mb-6">
-              "We don't believe in fast furniture. We believe in pieces that hold their strength, their finish, and their character over time."
-            </blockquote>
-            <div className="flex items-center justify-center gap-2">
-              <div className="w-8 h-px bg-[var(--color-primary)]" />
-              <span className="text-xs text-[var(--color-primary)] uppercase tracking-widest">WoodIt Exportz</span>
-              <div className="w-8 h-px bg-[var(--color-primary)]" />
+  <section className="bg-[var(--color-background)] py-16 sm:py-20">
+    <div className="page-shell grid gap-10 lg:grid-cols-[1fr_0.9fr] lg:items-center">
+      <div>
+        <p className="mb-3 text-xs font-semibold uppercase tracking-[0.22em] text-[var(--color-primary)]">About WoodIt</p>
+        <h2 className="font-serif text-4xl font-semibold leading-tight text-[var(--color-text)] sm:text-5xl">
+          Rooted in craft. Built for the world.
+        </h2>
+        <p className="mt-5 max-w-2xl text-sm leading-7 text-[var(--color-text-muted)]">
+          {ABOUT_COPY.shortIntro}
+        </p>
+        <p className="mt-5 max-w-3xl text-sm leading-7 text-[var(--color-text-muted)]">
+          {ABOUT_COPY.brandStory}
+        </p>
+        <div className="mt-8 grid gap-3 sm:grid-cols-2">
+          {[
+            { label: 'Real Wood', desc: 'Real wood, metal, rope, and leather shaped with intention.' },
+            { label: 'B2B Focused', desc: 'Built for hospitality brands, designers, and global buyers.' },
+            { label: 'Export Quality', desc: 'Consistency, reliability, and standards that meet the world.' },
+            { label: 'Jodhpur Craft', desc: 'Rooted in a legacy of skilled furniture craftsmanship.' },
+          ].map((item) => (
+            <div key={item.label} className="rounded-md border border-[var(--color-border)] bg-white p-4">
+              <p className="text-sm font-semibold text-[var(--color-text)]">{item.label}</p>
+              <p className="mt-1 text-xs leading-5 text-[var(--color-text-muted)]">{item.desc}</p>
             </div>
-          </div>
+          ))}
         </div>
+      </div>
+      <div className="grid grid-cols-2 gap-3 sm:gap-4">
+        <img src={aboutOne} alt="WoodIt crafted furniture detail" className="aspect-[3/4] w-full rounded-md object-cover" />
+        <img src={aboutTwo} alt="WoodIt furniture interior setting" className="mt-8 aspect-[3/4] w-full rounded-md object-cover sm:mt-12" />
       </div>
     </div>
   </section>
 );
 
 const CatalogueCTA = () => (
-  <section className="py-24 bg-[#111]">
-    <div className="max-w-7xl mx-auto px-6 sm:px-10 lg:px-16">
-      <div className="max-w-2xl mx-auto text-center">
-        <div className="flex items-center justify-center gap-3 mb-5">
-          <div className="w-8 h-px bg-[var(--color-primary-light)]" />
-          <span className="text-xs uppercase tracking-[0.25em] text-[var(--color-primary-light)] font-medium">Full Collection</span>
-          <div className="w-8 h-px bg-[var(--color-primary-light)]" />
-        </div>
-        <h2 className="font-serif text-4xl sm:text-5xl font-semibold text-white mb-4">
-          Download Our Catalogue
-        </h2>
-        <p className="text-gray-400 text-sm leading-relaxed mb-10">
-          Get the full WoodIt Exportz product catalogue with all collections, material specifications, and design finishes.
-        </p>
-        <div className="flex flex-wrap items-center justify-center gap-4">
-          <Button size="lg">Download Catalogue</Button>
-          <a href={WHATSAPP_LINK()} target="_blank" rel="noreferrer">
-            <Button variant="outline" size="lg" className="!border-white !text-white hover:!bg-white hover:!text-[var(--color-text)]">
-              Talk to Us
-            </Button>
-          </a>
-        </div>
+  <section className="bg-[#171310] py-16 text-white sm:py-20">
+    <div className="page-shell text-center">
+      <p className="mb-3 text-xs font-semibold uppercase tracking-[0.22em] text-[var(--color-primary-light)]">Full Collection</p>
+      <h2 className="font-serif text-4xl font-semibold sm:text-5xl">Need the complete catalogue?</h2>
+      <p className="mx-auto mt-4 max-w-xl text-sm leading-7 text-white/62">
+        Browse the digital catalogue or speak with the WoodIt team for product details, materials, and project requirements.
+      </p>
+      <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
+        <Button size="lg" className="w-full sm:w-auto">Download Catalogue</Button>
+        <a href={WHATSAPP_LINK()} target="_blank" rel="noreferrer">
+          <Button variant="outline" size="lg" className="w-full border-white/80 text-white hover:bg-white hover:text-[var(--color-text)] sm:w-auto">
+            Talk to Us
+          </Button>
+        </a>
       </div>
+      <p className="mt-8 text-xs uppercase tracking-[0.18em] text-white/45">{FINAL_BRAND_LINE}</p>
     </div>
   </section>
 );

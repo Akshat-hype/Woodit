@@ -1,15 +1,16 @@
 import { useState } from 'react';
-import { X } from 'lucide-react';
+import { MessageCircle, X } from 'lucide-react';
+import toast from 'react-hot-toast';
 import { inquiryService } from '../../../services/inquiry.service';
+import { WHATSAPP_LINK } from '../../../utils/constants';
 import { isValidPhone } from '../../../utils/validators';
 import Button from './Button';
-import toast from 'react-hot-toast';
 
 const PhoneGate = ({ product, onClose }) => {
   const [phone, setPhone] = useState('');
   const [loading, setLoading] = useState(false);
   const [unlocked, setUnlocked] = useState(false);
-  const [productData, setProductData] = useState(null);
+  const [productData, setProductData] = useState(product);
 
   const handleSubmit = async () => {
     if (!isValidPhone(phone)) {
@@ -22,7 +23,7 @@ const PhoneGate = ({ product, onClose }) => {
       const res = await inquiryService.create({ phone, product_id: product.id });
       setProductData(res.data.data.product);
       setUnlocked(true);
-      toast.success('Product details unlocked!');
+      toast.success('Product details unlocked');
     } catch (err) {
       toast.error(err.response?.data?.message || 'Something went wrong');
     } finally {
@@ -30,72 +31,79 @@ const PhoneGate = ({ product, onClose }) => {
     }
   };
 
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4">
-      <div className="bg-white rounded-sm w-full max-w-md shadow-2xl">
+  const whatsappMessage = `Hello, I am interested in ${productData?.name || product.name}. My phone number is ${phone}.`;
 
-        {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b border-[var(--color-border)]">
-          <h3 className="font-serif text-lg font-semibold text-[var(--color-text)]">
-            {unlocked ? product.name : 'View Product Details'}
-          </h3>
-          <button onClick={onClose} className="p-1 hover:bg-[var(--color-background)] rounded">
-            <X size={18} />
+  return (
+    <div className="fixed inset-0 z-50 flex items-end bg-black/55 px-0 sm:items-center sm:px-4">
+      <div className="max-h-[92svh] w-full overflow-y-auto rounded-t-lg bg-white shadow-2xl sm:mx-auto sm:max-w-2xl sm:rounded-md">
+        <div className="sticky top-0 z-10 flex items-center justify-between border-b border-[var(--color-border)] bg-white px-5 py-4 sm:px-6">
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--color-primary)]">
+              {unlocked ? 'Product Details' : 'Unlock Details'}
+            </p>
+            <h3 className="mt-1 font-serif text-xl font-semibold text-[var(--color-text)]">{product.name}</h3>
+          </div>
+          <button type="button" onClick={onClose} className="inline-flex size-10 items-center justify-center rounded-sm hover:bg-[var(--color-background)]" aria-label="Close">
+            <X size={20} />
           </button>
         </div>
 
         {!unlocked ? (
-          /* Phone Entry */
-          <div className="p-6">
-            <p className="text-sm text-[var(--color-text-muted)] mb-6">
-              Enter your phone number to view product details. We'll reach out if you're interested.
+          <div className="p-5 sm:p-6">
+            <p className="text-sm leading-6 text-[var(--color-text-muted)]">
+              Enter your phone number to view full product details. This also creates a product inquiry for the WoodIt team.
             </p>
-            <div className="flex gap-2 mb-2">
-              <span className="flex items-center px-3 bg-[var(--color-background)] border border-[var(--color-border)] rounded-sm text-sm text-[var(--color-text-muted)]">
+            <div className="mt-6 flex gap-2">
+              <span className="flex min-h-12 items-center rounded-sm border border-[var(--color-border)] bg-[var(--color-background)] px-3 text-sm text-[var(--color-text-muted)]">
                 +91
               </span>
               <input
                 type="tel"
+                inputMode="numeric"
                 maxLength={10}
                 value={phone}
-                onChange={e => setPhone(e.target.value.replace(/\D/g, ''))}
+                onChange={(event) => setPhone(event.target.value.replace(/\D/g, ''))}
                 placeholder="10-digit mobile number"
-                className="flex-1 px-4 py-3 border border-[var(--color-border)] rounded-sm text-sm outline-none focus:border-[var(--color-primary)] transition-colors"
-                onKeyDown={e => e.key === 'Enter' && handleSubmit()}
+                className="min-h-12 min-w-0 flex-1 rounded-sm border border-[var(--color-border)] px-4 text-sm outline-none transition-colors focus:border-[var(--color-primary)]"
+                onKeyDown={(event) => event.key === 'Enter' && handleSubmit()}
               />
             </div>
-            <p className="text-xs text-[var(--color-text-muted)] mb-6">
-              Your number is used only for inquiry purposes.
+            <p className="mt-3 text-xs leading-5 text-[var(--color-text-muted)]">
+              Your number is used only for inquiry and follow-up communication.
             </p>
-            <Button onClick={handleSubmit} loading={loading} className="w-full">
+            <Button onClick={handleSubmit} loading={loading} className="mt-6 w-full">
               View Product
             </Button>
           </div>
         ) : (
-          /* Product Details */
-          <div className="p-6">
-            {productData?.images?.length > 0 && (
-              <img
-                src={productData.images[0]}
-                alt={productData.name}
-                className="w-full aspect-video object-cover rounded-sm mb-4"
-              />
-            )}
-            {productData?.description && (
-              <p className="text-sm text-[var(--color-text-muted)] leading-relaxed mb-3">
-                {productData.description}
+          <div className="grid gap-5 p-5 sm:grid-cols-[0.95fr_1.05fr] sm:p-6">
+            <div className="overflow-hidden rounded-md bg-[var(--color-background)]">
+              {productData?.images?.[0] ? (
+                <img src={productData.images[0]} alt={productData.name} className="aspect-[4/3] h-full w-full object-cover" />
+              ) : (
+                <div className="flex aspect-[4/3] items-center justify-center text-sm font-semibold text-[var(--color-accent)]">WoodIt</div>
+              )}
+            </div>
+            <div>
+              <p className="text-sm leading-7 text-[var(--color-text-muted)]">
+                {productData?.description || 'Full product information is available through the WoodIt team.'}
               </p>
-            )}
-            {productData?.material && (
-              <p className="text-xs text-[var(--color-text-muted)]">
-                <span className="font-medium text-[var(--color-text)]">Material:</span> {productData.material}
-              </p>
-            )}
-            <div className="flex gap-3 mt-6">
-              <Button className="flex-1">Enquire Now</Button>
-              <Button variant="outline" className="flex-1">
-                WhatsApp
-              </Button>
+              {productData?.material && (
+                <p className="mt-4 text-sm text-[var(--color-text-muted)]">
+                  <span className="font-semibold text-[var(--color-text)]">Material:</span> {productData.material}
+                </p>
+              )}
+              <div className="mt-6 flex flex-col gap-3">
+                <a href={WHATSAPP_LINK(whatsappMessage)} target="_blank" rel="noreferrer">
+                  <Button className="w-full bg-[var(--color-accent)] hover:bg-[#26594c]">
+                    <MessageCircle size={18} />
+                    Contact on WhatsApp
+                  </Button>
+                </a>
+                <Button variant="outline" className="w-full" onClick={onClose}>
+                  Continue Browsing
+                </Button>
+              </div>
             </div>
           </div>
         )}
