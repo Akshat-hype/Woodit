@@ -1,5 +1,10 @@
 import express from "express";
 import cors from "cors";
+import path from "path";
+import { fileURLToPath } from "url";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 import corsOptions from "./config/cors.js";
 import { errorMiddleware } from "./middlewares/error.middleware.js";
 import { rateLimitMiddleware } from "./middlewares/rateLimit.middleware.js";
@@ -39,11 +44,19 @@ app.use("/api/catalogue", catalogueRoutes);
 app.use("/api/categories", categoryRoutes);
 app.use("/api/media", mediaRoutes);
 
-// 404 handler
+// 1. Point Express to your Vite production build directory (Assuming side-by-side folders)
+app.use(express.static(path.join(__dirname, "../client/dist")));
+
+// 2. Fallback rule: send all non-API web requests straight to React Router
+// Use a RegExp to avoid wildcard string parsing issues in path-to-regexp
+app.get(/^\/(?!api).*/, (req, res) => {
+  res.sendFile(path.join(__dirname, "../client/dist", "index.html"));
+});
+
+// 404 handler (after static and SPA fallback)
 app.use((req, res) => {
   res.status(404).json({ success: false, message: "Route not found" });
 });
-
 // Global error handler (always last)
 app.use(errorMiddleware);
 
