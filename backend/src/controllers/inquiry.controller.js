@@ -19,6 +19,7 @@ export const createInquiry = async (req, res, next) => {
       .single();
 
     if (tokenError || !tokenData) {
+      console.error("Phone token verification failed:", tokenError);
       return sendError(
         res,
         "Invalid or expired phone token. Please verify OTP again.",
@@ -43,6 +44,7 @@ export const createInquiry = async (req, res, next) => {
       .single();
 
     if (productError || !product) {
+      console.error("Product lookup failed:", productError);
       return sendError(res, "Product not found", 404);
     }
 
@@ -71,7 +73,10 @@ export const createInquiry = async (req, res, next) => {
         category_slug: product.categories.slug,
       });
 
-    if (inquiryError) return sendError(res, inquiryError.message, 400);
+    if (inquiryError) {
+      console.error("Failed to insert inquiry:", inquiryError);
+      return sendError(res, inquiryError.message, 400);
+    }
 
     // Return product details so frontend can display them
     return sendSuccess(res, { product }, "Inquiry created", 201);

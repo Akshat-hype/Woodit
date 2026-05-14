@@ -31,6 +31,7 @@ export const sendOTP = async (req, res, next) => {
       );
 
     if (error) {
+      console.error("Supabase upsert error (otp_verifications):", error);
       return sendError(res, "Failed to send OTP", 400);
     }
 
@@ -38,12 +39,12 @@ export const sendOTP = async (req, res, next) => {
     // For now, we log it (frontend should show a test OTP message in development)
     console.log(`[DEV] OTP for ${phone}: ${otp}`);
 
-    return sendSuccess(
-      res,
-      { message: "OTP sent to phone number" },
-      "OTP sent",
-      200,
-    );
+    const responseData = { message: "OTP sent to phone number" };
+    if (process.env.NODE_ENV !== "production") {
+      responseData.otp = otp;
+    }
+
+    return sendSuccess(res, responseData, "OTP sent", 200);
   } catch (err) {
     next(err);
   }
@@ -85,6 +86,7 @@ export const verifyOTP = async (req, res, next) => {
       .eq("phone", phone);
 
     if (updateError) {
+      console.error("Supabase update error (otp_verifications):", updateError);
       return sendError(res, "Verification failed", 400);
     }
 
@@ -92,12 +94,17 @@ export const verifyOTP = async (req, res, next) => {
     const token = crypto.randomBytes(32).toString("hex");
     const tokenExpiry = new Date(Date.now() + 24 * 60 * 60 * 1000);
 
-    await supabaseAdmin
+    const { error: tokenUpsertError } = await supabaseAdmin
       .from("phone_tokens")
       .upsert(
         { phone, token, expires_at: tokenExpiry.toISOString() },
         { onConflict: "phone" },
       );
+
+    if (tokenUpsertError) {
+      console.error("Supabase upsert error (phone_tokens):", tokenUpsertError);
+      return sendError(res, "Failed to generate phone token", 500);
+    }
 
     return sendSuccess(res, { phone, token }, "Phone verified successfully");
   } catch (err) {
