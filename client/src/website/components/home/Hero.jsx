@@ -8,15 +8,19 @@ import Button from "../common/Button";
 import { heroService } from "../../../services/hero.service";
 
 const Hero = () => {
-  const [heroBanner, setHeroBanner] = useState(null);
+  const [banners, setBanners] = useState([]);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [prevIndex, setPrevIndex] = useState(null);
+  const [showCurrent, setShowCurrent] = useState(true);
 
   useEffect(() => {
     heroService
       .getHero()
       .then((res) => {
-        const banners = res.data.data.banners || [];
-        if (banners.length > 0) {
-          setHeroBanner(banners[0]);
+        const fetched = res.data.data.banners || [];
+        if (fetched.length > 0) {
+          setBanners(fetched);
+          setCurrentIndex(0);
         }
       })
       .catch(() => {
@@ -24,30 +28,90 @@ const Hero = () => {
       });
   }, []);
 
-  const displayImage = heroBanner?.media_url || heroImage;
+  const currentBanner = banners.length > 0 ? banners[currentIndex] : null;
+  
+
+  useEffect(() => {
+    if (banners.length <= 1) return;
+    const id = setInterval(() => {
+      setCurrentIndex((i) => {
+        const next = (i + 1) % banners.length;
+        setPrevIndex(i);
+        setShowCurrent(false);
+        // trigger fade-in on next tick
+        setTimeout(() => setShowCurrent(true), 50);
+        // clear prev after transition
+        setTimeout(() => setPrevIndex(null), 800);
+        return next;
+      });
+    }, 5000);
+    return () => clearInterval(id);
+  }, [banners.length]);
 
   return (
     <section className="relative min-h-[calc(100svh-64px)] overflow-hidden bg-[#111] text-white">
-      {heroBanner?.media_type === "video" ? (
-        <video
-          autoPlay
-          loop
-          muted
-          playsInline
-          className="absolute inset-0 h-full w-full object-cover"
-        >
-          <source src={displayImage} type="video/mp4" />
-        </video>
-      ) : (
-        <picture className="absolute inset-0">
-          <source media="(max-width: 640px)" srcSet={heroMobileImage} />
-          <img
-            src={displayImage}
-            alt="WoodIt real wood furniture collection"
-            className="h-full w-full object-cover"
-          />
-        </picture>
-      )}
+      {/* Crossfade previous and current media for smooth transitions */}
+      {prevIndex !== null &&
+        banners[prevIndex] &&
+        (() => {
+          const prev = banners[prevIndex];
+          const prevSrc = prev.media_url || heroImage;
+          if (prev.media_type === "video") {
+            return (
+              <video
+                autoPlay
+                loop
+                muted
+                playsInline
+                className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-1000${showCurrent ? "opacity-0" : "opacity-100"}`}
+              >
+                <source src={prevSrc} type="video/mp4" />
+              </video>
+            );
+          }
+          return (
+            <picture
+              className={`absolute inset-0 transition-opacity duration-1000 ${showCurrent ? "opacity-0" : "opacity-100"}`}
+            >
+              <source media="(max-width: 640px)" srcSet={heroMobileImage} />
+              <img
+                src={prevSrc}
+                alt="prev banner"
+                className="h-full w-full object-cover"
+              />
+            </picture>
+          );
+        })()}
+
+      {currentBanner &&
+        (() => {
+          const curSrc = currentBanner.media_url || heroImage;
+          if (currentBanner.media_type === "video") {
+            return (
+              <video
+                autoPlay
+                loop
+                muted
+                playsInline
+                className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-1000 ${showCurrent ? "opacity-100" : "opacity-0"}`}
+              >
+                <source src={curSrc} type="video/mp4" />
+              </video>
+            );
+          }
+          return (
+            <picture
+              className={`absolute inset-0 transition-opacity duration-1000 ${showCurrent ? "opacity-100" : "opacity-0"}`}
+            >
+              <source media="(max-width: 640px)" srcSet={heroMobileImage} />
+              <img
+                src={curSrc}
+                alt="WoodIt real wood furniture collection"
+                className="h-full w-full object-cover"
+              />
+            </picture>
+          );
+        })()}
       <div className="absolute inset-0 bg-linear-to-r from-black/80 via-black/45 to-black/15" />
       <div className="absolute inset-x-0 bottom-0 h-28 bg-linear-to-t from-black/45 to-transparent" />
 
@@ -87,7 +151,7 @@ const Hero = () => {
           <div className="mt-9 grid max-w-xl grid-cols-3 gap-3 border-t border-white/20 pt-5">
             {[
               { value: "B2B", label: "Focused" },
-              { value: "8", label: "Collections" },
+              { value: "15+", label: "Collections" },
               { value: "Real", label: "Wood" },
             ].map((stat) => (
               <div key={stat.label}>
@@ -102,6 +166,7 @@ const Hero = () => {
           </div>
         </div>
       </div>
+      {/* Autoplay advances banners every 5s */}
     </section>
   );
 };

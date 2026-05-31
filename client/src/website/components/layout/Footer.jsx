@@ -9,7 +9,7 @@ const Footer = () => {
         <div className="grid gap-10 lg:grid-cols-[1.2fr_1fr_1fr_1fr]">
           <div>
             <span className="font-serif text-3xl font-bold">
-              Wood<span className="text-[var(--color-primary-light)]">It</span>
+              Wood<span className="text-[var(--color-primary-light)]">It</span> Exportz
             </span>
             <p className="mt-4 max-w-sm text-sm leading-7 text-white/62">
               Jodhpur-based furniture makers creating durable, handcrafted pieces for global spaces.
