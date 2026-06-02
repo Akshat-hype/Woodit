@@ -1,14 +1,16 @@
 import { Link } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
 import { CATEGORIES, COLLECTIONS_COPY } from '../../utils/constants';
-import chairImage from '../../assets/images/categories-accent-chair.webp';
-import sofaImage from '../../assets/images/categories-lounge-sofa-set.webp';
-import stoolImage from '../../assets/images/categories-folding-butterfly-chair.webp';
-import bedImage from '../../assets/images/categories-heritage-canopy-bed.webp';
-import cabinetImage from '../../assets/images/categories-cabinet-chest-of-drawers.webp';
-import outdoorImage from '../../assets/images/categories-handwoven-rope-lounge-chair.webp';
+import theChairGallery from '../../assets/images/the-chair-gallery.webp';
+import urbanMetalSeating from '../../assets/images/urban-metal-seating.webp';
+import theHighSeatCollection from '../../assets/images/the-high-seat-collection.webp';
+import signatureSeating from '../../assets/images/signature-seating.webp';
+import diningAndLivingEnsembles from '../../assets/images/dining-and-living-ensembles.webp';
+import signatureBedroomSets from '../../assets/images/signature-bedroom-sets.webp';
+import openAirCollection from '../../assets/images/open-air-collection.webp';
+import cabinetsAndSideTables from '../../assets/images/cabinets-and-side-tables.webp';
 
-const categoryImages = [chairImage, sofaImage, stoolImage, bedImage, outdoorImage, cabinetImage, chairImage, cabinetImage];
+const categoryImages = [theChairGallery, urbanMetalSeating, theHighSeatCollection, signatureSeating, diningAndLivingEnsembles, signatureBedroomSets, openAirCollection, cabinetsAndSideTables];
 
 const Categories = () => (
   <main>
