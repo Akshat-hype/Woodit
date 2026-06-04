@@ -5,15 +5,37 @@ import {
   uploadCatalogue,
   deleteCatalogue,
 } from '../controllers/catalogue.controller.js';
+
 import { authMiddleware } from '../middlewares/auth.middleware.js';
 import { adminMiddleware } from '../middlewares/admin.middleware.js';
+import { uploadCataloguePdf } from '../middlewares/uploadCatalogue.js';
 
 const router = Router();
 
+// Public
 router.get('/', getCatalogue);
 
-router.get('/admin/all', authMiddleware, adminMiddleware, getAllCatalogues);
-router.post('/', authMiddleware, adminMiddleware, uploadCatalogue);
-router.delete('/:id', authMiddleware, adminMiddleware, deleteCatalogue);
+// Admin
+router.get(
+  '/admin/all',
+  authMiddleware,
+  adminMiddleware,
+  getAllCatalogues
+);
+
+router.post(
+  '/',
+  authMiddleware,
+  adminMiddleware,
+  uploadCataloguePdf.single('pdf'),
+  uploadCatalogue
+);
+
+router.delete(
+  '/:id',
+  authMiddleware,
+  adminMiddleware,
+  deleteCatalogue
+);
 
 export default router;

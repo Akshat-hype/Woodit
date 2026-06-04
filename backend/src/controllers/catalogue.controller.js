@@ -1,7 +1,9 @@
 import { supabase, supabaseAdmin } from '../config/supabase.js';
 import { sendSuccess, sendError } from '../utils/response.js';
+import path from 'path';
 
-// GET /api/catalogue — latest catalogue for public download
+// GET /api/catalogue
+// Returns the latest uploaded catalogue
 export const getCatalogue = async (req, res, next) => {
   try {
     const { data, error } = await supabase
@@ -11,7 +13,9 @@ export const getCatalogue = async (req, res, next) => {
       .limit(1)
       .single();
 
-    if (error || !data) return sendError(res, 'No catalogue available', 404);
+    if (error || !data) {
+      return sendError(res, 'No catalogue available', 404);
+    }
 
     return sendSuccess(res, { catalogue: data });
   } catch (err) {
@@ -19,7 +23,8 @@ export const getCatalogue = async (req, res, next) => {
   }
 };
 
-// GET /api/catalogue/admin/all  [admin]
+// GET /api/catalogue/admin/all
+// Returns all catalogues
 export const getAllCatalogues = async (req, res, next) => {
   try {
     const { data, error } = await supabaseAdmin
@@ -27,7 +32,9 @@ export const getAllCatalogues = async (req, res, next) => {
       .select('*')
       .order('uploaded_at', { ascending: false });
 
-    if (error) return sendError(res, error.message, 400);
+    if (error) {
+      return sendError(res, error.message, 400);
+    }
 
     return sendSuccess(res, { catalogues: data });
   } catch (err) {
@@ -35,42 +42,109 @@ export const getAllCatalogues = async (req, res, next) => {
   }
 };
 
-// POST /api/catalogue  [admin]
+// POST /api/catalogue
+// Upload PDF to Supabase Storage and save metadata
 export const uploadCatalogue = async (req, res, next) => {
   try {
-    const { file_name, file_url, version } = req.body;
+    const { title, description } = req.body;
 
-    if (!file_name || !file_url) {
-      return sendError(res, 'file_name and file_url are required', 400);
+    if (!req.file) {
+      return sendError(res, 'PDF file is required', 400);
     }
 
+    const fileExt = path.extname(req.file.originalname);
+
+    if (fileExt.toLowerCase() !== '.pdf') {
+      return sendError(res, 'Only PDF files are allowed', 400);
+    }
+
+    const fileName = `catalogue-${Date.now()}${fileExt}`;
+
+    // Upload PDF to Supabase Storage
+    const { error: uploadError } = await supabaseAdmin.storage
+      .from('catalogue-pdfs')
+      .upload(fileName, req.file.buffer, {
+        contentType: 'application/pdf',
+        upsert: false,
+      });
+
+    if (uploadError) {
+      return sendError(res, uploadError.message, 400);
+    }
+
+    // Get Public URL
+    const { data: publicUrlData } = supabaseAdmin.storage
+      .from('catalogue-pdfs')
+      .getPublicUrl(fileName);
+
+    // Save metadata to database
     const { data, error } = await supabaseAdmin
       .from('catalogue')
-      .insert({ file_name, file_url, version })
+      .insert({
+        title,
+        description,
+        file_name: fileName,
+        file_url: publicUrlData.publicUrl,
+      })
       .select()
       .single();
 
-    if (error) return sendError(res, error.message, 400);
+    if (error) {
+      // Cleanup uploaded file if DB insert fails
+      await supabaseAdmin.storage
+        .from('catalogue-pdfs')
+        .remove([fileName]);
 
-    return sendSuccess(res, { catalogue: data }, 'Catalogue uploaded', 201);
+      return sendError(res, error.message, 400);
+    }
+
+    return sendSuccess(
+      res,
+      { catalogue: data },
+      'Catalogue uploaded successfully',
+      201
+    );
   } catch (err) {
     next(err);
   }
 };
 
-// DELETE /api/catalogue/:id  [admin]
+// DELETE /api/catalogue/:id
+// Delete PDF from storage and database
 export const deleteCatalogue = async (req, res, next) => {
   try {
     const { id } = req.params;
 
+    const { data: catalogue, error: fetchError } = await supabaseAdmin
+      .from('catalogue')
+      .select('*')
+      .eq('id', id)
+      .single();
+
+    if (fetchError || !catalogue) {
+      return sendError(res, 'Catalogue not found', 404);
+    }
+
+    // Delete PDF from Storage
+    const { error: storageError } = await supabaseAdmin.storage
+      .from('catalogue-pdfs')
+      .remove([catalogue.file_name]);
+
+    if (storageError) {
+      console.error('Storage delete error:', storageError);
+    }
+
+    // Delete DB record
     const { error } = await supabaseAdmin
       .from('catalogue')
       .delete()
       .eq('id', id);
 
-    if (error) return sendError(res, error.message, 400);
+    if (error) {
+      return sendError(res, error.message, 400);
+    }
 
-    return sendSuccess(res, null, 'Catalogue deleted');
+    return sendSuccess(res, null, 'Catalogue deleted successfully');
   } catch (err) {
     next(err);
   }
