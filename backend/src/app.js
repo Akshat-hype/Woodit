@@ -46,12 +46,12 @@ app.use("/api/categories", categoryRoutes);
 app.use("/api/media", mediaRoutes);
 
 // Serve frontend build
-app.use(express.static(path.join(__dirname, "../../client/dist")));
+app.use(express.static(path.join(__dirname, "../../WOODIT/dist")));
 
 // Fallback rule: send all non-API web requests straight to React Router
 // Use a RegExp to avoid path-to-regexp errors when using wildcards
 app.get(/^\/(?!api).*/, (req, res) => {
-  res.sendFile(path.join(__dirname, "../../client/dist/index.html"));
+  res.sendFile(path.join(__dirname, "../../WOODIT/dist/index.html"));
 });
 
 // 404 handler (after static and SPA fallback)
