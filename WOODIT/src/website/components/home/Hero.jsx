@@ -12,7 +12,6 @@ const Hero = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [prevIndex, setPrevIndex] = useState(null);
   const [showCurrent, setShowCurrent] = useState(true);
-  const [imgLoaded, setImgLoaded] = useState(false);
 
   useEffect(() => {
     heroService
@@ -30,6 +29,7 @@ const Hero = () => {
   }, []);
 
   const currentBanner = banners.length > 0 ? banners[currentIndex] : null;
+  
 
   useEffect(() => {
     if (banners.length <= 1) return;
@@ -63,7 +63,6 @@ const Hero = () => {
                 loop
                 muted
                 playsInline
-                preload="auto"
                 className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-1000${showCurrent ? "opacity-0" : "opacity-100"}`}
               >
                 <source src={prevSrc} type="video/mp4" />
@@ -78,7 +77,6 @@ const Hero = () => {
               <img
                 src={prevSrc}
                 alt="prev banner"
-                decoding="async"
                 className="h-full w-full object-cover"
               />
             </picture>
@@ -95,7 +93,6 @@ const Hero = () => {
                 loop
                 muted
                 playsInline
-                preload="auto"
                 className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-1000 ${showCurrent ? "opacity-100" : "opacity-0"}`}
               >
                 <source src={curSrc} type="video/mp4" />
@@ -110,11 +107,7 @@ const Hero = () => {
               <img
                 src={curSrc}
                 alt="WoodIt real wood furniture collection"
-                loading="eager"
-                fetchPriority="high"
-                decoding="async"
-                onLoad={() => setImgLoaded(true)}
-                className={`h-full w-full object-cover ${imgLoaded ? "opacity-100 transition-opacity duration-700" : "opacity-0"}`}
+                className="h-full w-full object-cover"
               />
             </picture>
           );

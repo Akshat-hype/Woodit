@@ -66,15 +66,11 @@ const AboutSection = () => (
         <img
           src={aboutOne}
           alt="WoodIt crafted furniture detail"
-          loading="lazy"
-          decoding="async"
           className="aspect-[3/4] w-full rounded-md object-cover"
         />
         <img
           src={aboutTwo}
           alt="WoodIt furniture interior setting"
-          loading="lazy"
-          decoding="async"
           className="mt-8 aspect-[3/4] w-full rounded-md object-cover sm:mt-12"
         />
       </div>
