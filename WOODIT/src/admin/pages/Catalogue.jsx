@@ -1,15 +1,14 @@
-
-import { useEffect, useState } from 'react';
-import { ExternalLink, Trash2, Upload } from 'lucide-react';
-import toast from 'react-hot-toast';
-import { catalogueService } from '../../services/catalogue.service';
-import ConfirmDialog from '../components/common/ConfirmDialog';
-import Modal from '../components/common/Modal';
-import Table from '../components/common/Table';
+import { useEffect, useState } from "react";
+import { ExternalLink, Trash2, Upload } from "lucide-react";
+import toast from "react-hot-toast";
+import { catalogueService } from "../../services/catalogue.service";
+import ConfirmDialog from "../components/common/ConfirmDialog";
+import Modal from "../components/common/Modal";
+import Table from "../components/common/Table";
 
 const emptyForm = {
-  title: '',
-  description: '',
+  title: "",
+  description: "",
   pdf: null,
 };
 
@@ -51,12 +50,12 @@ const Catalogue = () => {
     event.preventDefault();
 
     if (!form.title.trim()) {
-      toast.error('Title is required');
+      toast.error("Title is required");
       return;
     }
 
     if (!form.pdf) {
-      toast.error('Please select a PDF file');
+      toast.error("Please select a PDF file");
       return;
     }
 
@@ -65,23 +64,20 @@ const Catalogue = () => {
 
       const formData = new FormData();
 
-      formData.append('title', form.title);
-      formData.append('description', form.description);
-      formData.append('pdf', form.pdf);
+      formData.append("title", form.title);
+      formData.append("description", form.description);
+      formData.append("pdf", form.pdf);
 
       await catalogueService.upload(formData);
 
-      toast.success('Catalogue uploaded successfully');
+      toast.success("Catalogue uploaded successfully");
 
       setShowModal(false);
       setForm(emptyForm);
 
       loadCatalogues();
     } catch (err) {
-      toast.error(
-        err.response?.data?.message ||
-          'Could not upload catalogue'
-      );
+      toast.error(err.response?.data?.message || "Could not upload catalogue");
     } finally {
       setLoading(false);
     }
@@ -93,16 +89,13 @@ const Catalogue = () => {
 
       await catalogueService.delete(deleteTarget.id);
 
-      toast.success('Catalogue deleted successfully');
+      toast.success("Catalogue deleted successfully");
 
       setDeleteTarget(null);
 
       loadCatalogues();
     } catch (err) {
-      toast.error(
-        err.response?.data?.message ||
-          'Could not delete catalogue'
-      );
+      toast.error(err.response?.data?.message || "Could not delete catalogue");
     } finally {
       setLoading(false);
     }
@@ -113,11 +106,11 @@ const Catalogue = () => {
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
           <h1 className="font-serif text-3xl font-semibold text-[var(--color-text)]">
-            Catalogue
+            Company Profile
           </h1>
 
           <p className="mt-2 text-sm text-[var(--color-text-muted)]">
-            Upload and manage downloadable PDF catalogues.
+            Upload and manage the company profile PDF.
           </p>
         </div>
 
@@ -126,7 +119,7 @@ const Catalogue = () => {
           className="inline-flex items-center gap-2 rounded-sm bg-[var(--color-primary)] px-4 py-3 text-sm font-medium text-white hover:bg-[var(--color-primary-dark)]"
         >
           <Upload size={16} />
-          Upload Catalogue
+          Upload Company Profile
         </button>
       </div>
 
@@ -134,25 +127,25 @@ const Catalogue = () => {
         <Table
           columns={[
             {
-              key: 'title',
-              label: 'Title',
+              key: "title",
+              label: "Title",
             },
             {
-              key: 'description',
-              label: 'Description',
-              render: (row) => row.description || '-',
+              key: "description",
+              label: "Description",
+              render: (row) => row.description || "-",
             },
             {
-              key: 'uploaded_at',
-              label: 'Uploaded',
+              key: "uploaded_at",
+              label: "Uploaded",
               render: (row) =>
                 row.uploaded_at
                   ? new Date(row.uploaded_at).toLocaleString()
-                  : '-',
+                  : "-",
             },
             {
-              key: 'actions',
-              label: 'Actions',
+              key: "actions",
+              label: "Actions",
               render: (row) => (
                 <div className="flex gap-2">
                   {row.file_url && (
@@ -181,33 +174,28 @@ const Catalogue = () => {
           rows={catalogues}
           emptyMessage={
             loading
-              ? 'Loading catalogues...'
-              : 'No catalogue uploaded yet'
+              ? "Loading company profiles..."
+              : "No company profile uploaded yet"
           }
         />
       </div>
 
       {showModal && (
         <Modal
-          title="Upload Catalogue"
-          description="Upload a PDF catalogue. The latest uploaded catalogue will be shown publicly."
+          title="Upload Company Profile"
+          description="Upload a PDF company profile. The latest uploaded profile will be shown publicly."
           onClose={() => setShowModal(false)}
         >
-          <form
-            onSubmit={uploadCatalogue}
-            className="grid gap-4"
-          >
+          <form onSubmit={uploadCatalogue} className="grid gap-4">
             <label className="block">
               <span className="text-xs font-semibold text-[var(--color-text-muted)]">
-                Catalogue Title
+                Profile Title
               </span>
 
               <input
                 type="text"
                 value={form.title}
-                onChange={(e) =>
-                  updateForm('title', e.target.value)
-                }
+                onChange={(e) => updateForm("title", e.target.value)}
                 className="mt-2 w-full rounded-sm border border-[var(--color-border)] px-4 py-3 text-sm outline-none focus:border-[var(--color-primary)]"
                 required
               />
@@ -221,9 +209,7 @@ const Catalogue = () => {
               <textarea
                 rows={3}
                 value={form.description}
-                onChange={(e) =>
-                  updateForm('description', e.target.value)
-                }
+                onChange={(e) => updateForm("description", e.target.value)}
                 className="mt-2 w-full rounded-sm border border-[var(--color-border)] px-4 py-3 text-sm outline-none focus:border-[var(--color-primary)]"
                 placeholder="Optional description"
               />
@@ -262,7 +248,7 @@ const Catalogue = () => {
                 disabled={loading}
                 className="rounded-sm bg-[var(--color-primary)] px-4 py-2.5 text-sm font-semibold text-white disabled:opacity-60"
               >
-                {loading ? 'Uploading...' : 'Upload Catalogue'}
+                {loading ? "Uploading..." : "Upload Company Profile"}
               </button>
             </div>
           </form>
@@ -271,7 +257,7 @@ const Catalogue = () => {
 
       {deleteTarget && (
         <ConfirmDialog
-          title="Delete catalogue"
+          title="Delete company profile"
           message={`Delete "${deleteTarget.title}"?`}
           loading={loading}
           onCancel={() => setDeleteTarget(null)}

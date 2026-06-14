@@ -91,7 +91,7 @@ const CatalogueCTA = () => {
         window.open(url, "_blank");
       }
     } catch (err) {
-      console.error("Failed to download catalogue");
+      console.error("Failed to load company profile");
     } finally {
       setLoading(false);
     }
@@ -100,15 +100,12 @@ const CatalogueCTA = () => {
   return (
     <section className="bg-[#171310] py-16 text-white sm:py-20">
       <div className="page-shell text-center">
-        <p className="mb-3 text-xs font-semibold uppercase tracking-[0.22em] text-[var(--color-primary-light)]">
-          Full Collection
-        </p>
         <h2 className="font-serif text-4xl font-semibold sm:text-5xl">
-          Need the complete catalogue?
+          Discover WoodIt Exportz
         </h2>
         <p className="mx-auto mt-4 max-w-xl text-sm leading-7 text-white/62">
-          Browse the digital catalogue or speak with the WoodIt team for product
-          details, materials, and project requirements.
+          Explore our company profile to learn about our collections,
+          craftsmanship, hospitality projects, and manufacturing capabilities.
         </p>
         <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
           <Button
@@ -117,7 +114,7 @@ const CatalogueCTA = () => {
             disabled={loading}
             className="w-full sm:w-auto"
           >
-            {loading ? "Loading..." : "Download Catalogue"}
+            {loading ? "Loading..." : "View Company Profile"}
           </Button>
           <a href={WHATSAPP_LINK()} target="_blank" rel="noreferrer">
             <Button
