@@ -2,7 +2,7 @@ export const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/ap
 export const WHATSAPP_NUMBER = import.meta.env.VITE_WHATSAPP_NUMBER || '919680077007';
 
 export const WHATSAPP_LINK = (message = 'Hello, I am interested in WoodIt Exportz furniture.') =>
-  `https://wa.me/${9680077007}?text=${encodeURIComponent(message)}`;
+  `https://wa.me/${919680077007}?text=${encodeURIComponent(message)}`;
 
 export const HERO_COPY = {
   headline: 'Crafted in Wood. Made for the World.',
