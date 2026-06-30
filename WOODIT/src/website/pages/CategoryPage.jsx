@@ -30,7 +30,16 @@ const CategoryPage = () => {
     <div>
       <section className="relative flex min-h-[320px] items-end bg-[#171310] text-white sm:min-h-[380px]">
         {category?.banner_url && (
-          <img src={category.banner_url} alt={category.name} className="absolute inset-0 h-full w-full object-cover opacity-55" />
+          <img
+            src={category.banner_url}
+            alt={category.name}
+            width="1920"
+            height="640"
+            fetchPriority="high"
+            loading="eager"
+            decoding="async"
+            className="absolute inset-0 h-full w-full object-cover opacity-55"
+          />
         )}
         <div className="page-shell relative py-12 sm:py-16">
           <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[var(--color-primary-light)]">Collection</p>

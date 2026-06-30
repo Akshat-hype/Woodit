@@ -17,6 +17,8 @@ export const getBanners = async (req, res, next) => {
     const { data, error } = await query;
     if (error) return sendError(res, error.message, 400);
 
+    res.set('Cache-Control', 'public, max-age=60, stale-while-revalidate=300');
+
     return sendSuccess(res, { banners: data });
   } catch (err) {
     next(err);

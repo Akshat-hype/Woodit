@@ -5,6 +5,7 @@ import { bannerService } from "../../services/banner.service";
 import { categoryService } from "../../services/category.service";
 import { mediaService } from "../../services/media.service";
 import { CATEGORIES } from "../../utils/constants";
+import { compressImageForUpload } from "../../utils/imageCompression";
 import ConfirmDialog from "../components/common/ConfirmDialog";
 import Modal from "../components/common/Modal";
 import Table from "../components/common/Table";
@@ -125,11 +126,12 @@ const Banners = () => {
     try {
       setLoading(true);
       const folder = form.type === "category" ? "category-banners" : "banners";
-      const res = await mediaService.upload(file, folder);
+      const uploadFile = await compressImageForUpload(file);
+      const res = await mediaService.upload(uploadFile, folder);
       updateForm("media_url", res.data.data.media.url);
       updateForm(
         "media_type",
-        file.type.startsWith("video/") ? "video" : "image",
+        uploadFile.type.startsWith("video/") ? "video" : "image",
       );
       toast.success("Media uploaded");
     } catch (err) {
@@ -144,7 +146,8 @@ const Banners = () => {
 
     try {
       setLoading(true);
-      const res = await mediaService.upload(file, "category-banners");
+      const uploadFile = await compressImageForUpload(file);
+      const res = await mediaService.upload(uploadFile, "category-banners");
       setCategoryBannerDrafts((prev) => ({
         ...prev,
         [category.id]: res.data.data.media.url,

@@ -21,7 +21,7 @@ const Navbar = () => {
       <div className="page-shell">
         <div className="flex h-16 items-center justify-between gap-4">
           <Link to="/" onClick={closeMenu} className="flex items-center gap-2">
-            <img src={logo} alt="WoodIt" className="h-12 w-auto" />
+            <img src={logo} alt="WoodIt" width="48" height="48" className="h-12 w-12" />
           </Link>
 
           <nav className="hidden items-center gap-7 lg:flex">

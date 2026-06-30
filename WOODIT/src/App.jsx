@@ -1,10 +1,12 @@
+import { lazy, Suspense } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import { AuthProvider } from './context/AuthContext';
 import { AdminProvider } from './context/AdminContext';
 import WebsiteRoutes from './website/routes/WebsiteRoutes';
-import AdminRoutes from './admin/routes/AdminRoutes';
-import AdminLogin from './admin/pages/AdminLogin';
+
+const AdminRoutes = lazy(() => import('./admin/routes/AdminRoutes'));
+const AdminLogin = lazy(() => import('./admin/pages/AdminLogin'));
 
 const App = () => {
   return (
@@ -12,16 +14,18 @@ const App = () => {
       <AuthProvider>
         <AdminProvider>
           <Toaster position="top-right" />
-          <Routes>
-            {/* Admin Login - outside AdminGuard */}
-            <Route path="/admin/login" element={<AdminLogin />} />
+          <Suspense fallback={null}>
+            <Routes>
+              {/* Admin Login - outside AdminGuard */}
+              <Route path="/admin/login" element={<AdminLogin />} />
 
-            {/* Admin Portal */}
-            <Route path="/admin/*" element={<AdminRoutes />} />
+              {/* Admin Portal */}
+              <Route path="/admin/*" element={<AdminRoutes />} />
 
-            {/* Main Website */}
-            <Route path="/*" element={<WebsiteRoutes />} />
-          </Routes>
+              {/* Main Website */}
+              <Route path="/*" element={<WebsiteRoutes />} />
+            </Routes>
+          </Suspense>
         </AdminProvider>
       </AuthProvider>
     </BrowserRouter>

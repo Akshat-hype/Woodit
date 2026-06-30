@@ -166,6 +166,10 @@ const Testimonials = () => {
                           <img
                             src={t.image_url}
                             alt={t.client_name}
+                            width="24"
+                            height="24"
+                            loading="lazy"
+                            decoding="async"
                             className="w-6 h-6 rounded-full object-cover"
                           />
                         ) : (

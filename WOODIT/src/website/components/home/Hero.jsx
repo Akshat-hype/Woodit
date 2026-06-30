@@ -2,8 +2,6 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { ArrowRight, MessageCircle } from "lucide-react";
 import { HERO_COPY, WHATSAPP_LINK } from "../../../utils/constants";
-import heroImage from "../../../assets/images/hero-1.webp";
-import heroMobileImage from "../../../assets/images/hero-1-mobile.webp";
 import Button from "../common/Button";
 import { heroService } from "../../../services/hero.service";
 
@@ -29,7 +27,6 @@ const Hero = () => {
   }, []);
 
   const currentBanner = banners.length > 0 ? banners[currentIndex] : null;
-  
 
   useEffect(() => {
     if (banners.length <= 1) return;
@@ -55,7 +52,7 @@ const Hero = () => {
         banners[prevIndex] &&
         (() => {
           const prev = banners[prevIndex];
-          const prevSrc = prev.media_url || heroImage;
+          const prevSrc = prev.media_url;
           if (prev.media_type === "video") {
             return (
               <video
@@ -70,22 +67,19 @@ const Hero = () => {
             );
           }
           return (
-            <picture
-              className={`absolute inset-0 transition-opacity duration-1000 ${showCurrent ? "opacity-0" : "opacity-100"}`}
-            >
-              <source media="(max-width: 640px)" srcSet={heroMobileImage} />
-              <img
-                src={prevSrc}
-                alt="prev banner"
-                className="h-full w-full object-cover"
-              />
-            </picture>
+            <img
+              src={prevSrc}
+              alt="prev banner"
+              width="1920"
+              height="1080"
+              className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-1000 ${showCurrent ? "opacity-0" : "opacity-100"}`}
+            />
           );
         })()}
 
       {currentBanner &&
         (() => {
-          const curSrc = currentBanner.media_url || heroImage;
+          const curSrc = currentBanner.media_url;
           if (currentBanner.media_type === "video") {
             return (
               <video
@@ -100,16 +94,16 @@ const Hero = () => {
             );
           }
           return (
-            <picture
-              className={`absolute inset-0 transition-opacity duration-1000 ${showCurrent ? "opacity-100" : "opacity-0"}`}
-            >
-              <source media="(max-width: 640px)" srcSet={heroMobileImage} />
-              <img
-                src={curSrc}
-                alt="WoodIt real wood furniture collection"
-                className="h-full w-full object-cover"
-              />
-            </picture>
+            <img
+              src={curSrc}
+              alt="WoodIt real wood furniture collection"
+              width="1920"
+              height="1080"
+              fetchPriority="high"
+              loading="eager"
+              decoding="async"
+              className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-1000 ${showCurrent ? "opacity-100" : "opacity-0"}`}
+            />
           );
         })()}
       <div className="absolute inset-0 bg-linear-to-r from-black/80 via-black/45 to-black/15" />

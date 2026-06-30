@@ -25,7 +25,7 @@ export const COLLECTIONS_COPY = {
 export const CONTACT = {
   businessName: 'WoodIt Exportz',
   phone: '+91-9680077007',
-  email: 'wooditexportz@gmail.com',
+  email: 'info@woodit.co.in',
   location: 'Jodhpur, Rajasthan, India',
   hours: 'Monday - Saturday: 10:00 AM - 7:00 PM',
   socials: ['Instagram', 'LinkedIn', 'WhatsApp Business', 'Pinterest', 'Facebook', 'YouTube'],

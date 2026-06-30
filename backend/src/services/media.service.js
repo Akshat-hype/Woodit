@@ -20,6 +20,7 @@ export async function uploadMedia(file, folder = "general") {
     .from(bucket)
     .upload(filePath, file.buffer, {
       contentType: file.mimetype,
+      cacheControl: "31536000",
       upsert: false,
     });
 
