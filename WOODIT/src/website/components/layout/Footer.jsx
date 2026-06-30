@@ -15,6 +15,21 @@ const Footer = () => {
               Jodhpur-based furniture makers creating durable, handcrafted pieces for global spaces.
             </p>
             <p className="mt-6 text-xs uppercase tracking-[0.18em] text-[var(--color-primary-light)]">{FINAL_BRAND_LINE}</p>
+            <div className="mt-5 flex gap-3">
+              {CONTACT.socials.map((social) => {
+                return (
+                  <a
+                    key={social.name}
+                    href={social.url}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex h-9 items-center justify-center rounded-sm border border-white/15 px-3 text-xs font-semibold text-white/75 transition hover:border-white/35 hover:text-white"
+                  >
+                    {social.name}
+                  </a>
+                );
+              })}
+            </div>
           </div>
 
           <div>

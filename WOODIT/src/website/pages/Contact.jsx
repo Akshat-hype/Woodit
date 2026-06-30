@@ -40,11 +40,19 @@ const Contact = () => {
             <div className="mt-8 border-t border-[var(--color-border)] pt-6">
               <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--color-primary)]">Socials</p>
               <div className="mt-3 flex flex-wrap gap-2">
-                {CONTACT.socials.map((social) => (
-                  <span key={social} className="rounded-sm bg-[var(--color-background)] px-3 py-1.5 text-xs text-[var(--color-text-muted)]">
-                    {social}
-                  </span>
-                ))}
+                {CONTACT.socials.map((social) => {
+                  return (
+                    <a
+                      key={social.name}
+                      href={social.url}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="inline-flex items-center rounded-sm bg-[var(--color-background)] px-3 py-1.5 text-xs text-[var(--color-text-muted)] transition hover:text-[var(--color-primary-dark)]"
+                    >
+                      {social.name}
+                    </a>
+                  );
+                })}
               </div>
             </div>
             <a href={WHATSAPP_LINK()} target="_blank" rel="noreferrer" className="mt-8 block">

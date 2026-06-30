@@ -28,7 +28,20 @@ export const CONTACT = {
   email: 'info@woodit.co.in',
   location: 'Jodhpur, Rajasthan, India',
   hours: 'Monday - Saturday: 10:00 AM - 7:00 PM',
-  socials: ['Instagram', 'LinkedIn', 'WhatsApp Business', 'Pinterest', 'Facebook', 'YouTube'],
+  socials: [
+    {
+      name: 'Instagram',
+      url: 'https://www.instagram.com/woodit_exportz?igsh=MXE1dDVzdzJ4bGNhcg==',
+    },
+    {
+      name: 'Pinterest',
+      url: 'https://pin.it/f88KlycUR',
+    },
+    {
+      name: 'LinkedIn',
+      url: 'https://www.linkedin.com/company/woodit-furniture11/',
+    },
+  ],
 };
 
 export const FINAL_BRAND_LINE = 'WoodIt Exportz: Handcrafted in India. Delivered Worldwide.';
