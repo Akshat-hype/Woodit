@@ -4,41 +4,21 @@ import { sendSuccess, sendError } from "../utils/response.js";
 // POST /api/inquiries — triggered when user enters phone & clicks a product
 export const createInquiry = async (req, res, next) => {
   try {
-    const { phone, product_id, token } = req.body;
+    const { phone, product_id } = req.body;
 
-    if (!phone || !product_id || !token) {
-      return sendError(res, "Phone, product_id, and token are required", 400);
+    if (!phone || !product_id) {
+      return sendError(res, "Phone and product_id are required", 400);
     }
 
-    // Verify phone token
-    const { data: tokenData, error: tokenError } = await supabaseAdmin
-      .from("phone_tokens")
-      .select("*")
-      .eq("phone", phone)
-      .eq("token", token)
-      .single();
-
-    if (tokenError || !tokenData) {
-      console.error("Phone token verification failed:", tokenError);
-      return sendError(
-        res,
-        "Invalid or expired phone token. Please verify OTP again.",
-        401,
-      );
-    }
-
-    if (new Date() > new Date(tokenData.expires_at)) {
-      return sendError(
-        res,
-        "Phone token expired. Please verify OTP again.",
-        401,
-      );
+    const phoneRegex = /^[6-9]\d{9}$/;
+    if (!phoneRegex.test(phone)) {
+      return sendError(res, "Invalid phone number", 400);
     }
 
     // Fetch product details
     const { data: product, error: productError } = await supabase
       .from("products")
-      .select("id, name, categories(slug)")
+      .select("*, categories(id, name, slug)")
       .eq("id", product_id)
       .eq("is_visible", true)
       .single();
@@ -70,7 +50,7 @@ export const createInquiry = async (req, res, next) => {
         phone,
         product_id: product.id,
         product_name: product.name,
-        category_slug: product.categories.slug,
+        category_slug: product.categories?.slug,
       });
 
     if (inquiryError) {
